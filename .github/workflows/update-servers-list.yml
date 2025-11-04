@@ -22,13 +22,6 @@ jobs:
         run: |
           STORAGE_FILEPATH=/tmp/sfp go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
 
-  create-pr:
-    runs-on: ubuntu-latest
-    needs: [check-for-updates]
-    permissions:
-      actions: read
-      contents: read
-    steps:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
@@ -39,16 +32,8 @@ jobs:
           base: master
           # todo: add labels
 
-  merge-pr:
-    runs-on: ubuntu-latest
-    needs: [create-pr]
-    permissions:
-      actions: read
-      contents: read
-    steps:
       - name: Enable auto-merge
         run: |
           gh pr merge ${{ needs.create-pr.pull-request-number }} --auto --merge
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ github.event.pull_request.number }}
