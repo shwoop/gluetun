@@ -19,10 +19,8 @@ jobs:
           go-version-file: go.mod
 
       - name: Update servers list
-        env:
-          STORAGE_FILEPATH: ""
         run: |
-          go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
+          STORAGE_FILEPATH= go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
