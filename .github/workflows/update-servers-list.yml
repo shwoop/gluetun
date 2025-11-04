@@ -26,7 +26,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.UPDATE_SERVERS_LIST_PAT }}
-          title: "Update servers list"
-          body: "This Auto Generated PR updates the servers list."
+          title: Update servers list
+          body: This Auto Generated PR updates the servers list.
           branch: bot/update-servers-list
+          base: master
           # todo: add labels
