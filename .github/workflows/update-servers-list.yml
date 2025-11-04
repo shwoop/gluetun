@@ -5,7 +5,7 @@ on:
     - cron: '11 3 1 */2 *'  # Run at 03:11 on the 1st of every 2nd month
 jobs:
   check-for-updates:
-    if: github.repository == 'qdm12/gluetun'
+    # if: github.repository == 'qdm12/gluetun'
     runs-on: ubuntu-latest
     environment: secrets
     permissions:
