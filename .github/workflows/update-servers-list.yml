@@ -2,7 +2,7 @@ name: Update servers list
 on:
   pull_request:
   schedule:
-    - cron: '11 3 1 */2 *'  # Run at 03:11 on the 1st of every 2nd month
+    - cron: "11 3 1 */2 *" # Run at 03:11 on the 1st of every 2nd month
 jobs:
   check-for-updates:
     # if: github.repository == 'qdm12/gluetun'
@@ -20,13 +20,13 @@ jobs:
 
       - name: Update servers list
         run: |
-          STORAGE_FILEPATH= go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
+          STORAGE_FILEPATH=/tmp/sfp go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.UPDATE_SERVERS_LIST_PAT }}
-          title: 'Update servers list'
-          body: 'This Auto Generated PR updates the servers list.'
+          title: "Update servers list"
+          body: "This Auto Generated PR updates the servers list."
           branch: bot/update-servers-list
           # todo: add labels
