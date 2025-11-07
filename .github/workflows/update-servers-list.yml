@@ -19,21 +19,22 @@ jobs:
           go-version-file: go.mod
 
       - name: Update servers list
+        env:
+          STORAGE_FILEPATH: /tmp/sfp
         run: |
-          STORAGE_FILEPATH=/tmp/sfp go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
+          go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
+
+      - name: Commit updated servers list
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B bot/update-servers-list
+          git add -A
+          git commit -m "Update maintainers servers list" || echo "No changes"
+          git push bot/update-servers-list
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.UPDATE_SERVERS_LIST_PAT }}
-          title: Update servers list
-          body: This Auto Generated PR updates the servers list.
-          branch: bot/update-servers-list
-          base: master
-          # todo: add labels
-
-      - name: Enable auto-merge
-        run: |
-          gh pr merge ${{ needs.create-pr.pull-request-number }} --auto --merge
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.UPDATE_SERVERS_LIST_PAT }}
+        run: |
+          gh pr create --title "Update servers list" --body "This Auto Generated PR updates the servers list." --base master --head bot/update-servers-list
