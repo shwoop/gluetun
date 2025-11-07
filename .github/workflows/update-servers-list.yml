@@ -10,6 +10,7 @@ jobs:
     permissions:
       actions: read
       contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v5
 
@@ -28,8 +29,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B bot/update-servers-list
-          git add -A
+          git checkout -b bot/update-servers-list
+          git add internal/storage/servers.json
           git commit -m "Update maintainers servers list" || echo "No changes"
           git push bot/update-servers-list
 
