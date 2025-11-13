@@ -154,7 +154,7 @@ func _main(ctx context.Context, buildInfo models.BuildInformation,
 		case "openvpnconfig":
 			return cli.OpenvpnConfig(logger, reader, netLinker)
 		case "update":
-			return cli.Update(ctx, args[2:], logger)
+			return cli.Update(ctx, args[2:], reader, logger)
 		case "format-servers":
 			return cli.FormatServers(args[2:])
 		case "genkey":
@@ -588,7 +588,7 @@ type clier interface {
 	FormatServers(args []string) error
 	OpenvpnConfig(logger cli.OpenvpnConfigLogger, reader *reader.Reader, ipv6Checker cli.IPv6Checker) error
 	HealthCheck(ctx context.Context, reader *reader.Reader, warner cli.Warner) error
-	Update(ctx context.Context, args []string, logger cli.UpdaterLogger) error
+	Update(ctx context.Context, args []string, reader *reader.Reader, logger cli.UpdaterLogger) error
 	GenKey(args []string) error
 }
 
