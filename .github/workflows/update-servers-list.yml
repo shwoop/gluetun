@@ -32,7 +32,7 @@ jobs:
           git checkout -b bot/update-servers-list
           git add internal/storage/servers.json
           git commit -m "Update maintainers servers list" || echo "No changes"
-          git push bot/update-servers-list
+          git push origin bot/update-servers-list
 
       - name: Create Pull Request
         env:
