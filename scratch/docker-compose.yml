@@ -1,0 +1,42 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:v3
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    # entrypoint: "sh -c 'while true; do sleep 1s; done'"
+    # entrypoint: [
+    #   "/bin/sh",
+    #   "-c",
+    #   "./gluetun-entrypoint update -enduser -providers 'private internet access' && ./gluetun-entrypoint"
+    # ]
+    container_name: gluetun
+    cap_add:
+      - ALL
+      # - NET_ADMIN
+      # - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8888:8888/tcp # HTTP proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
+      - 8000:8000/tcp # Built-in HTTP control server
+    volumes:
+      - config:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=private internet access
+      - TZ=Europe/London
+      - OPENVPN_USER=p9854053
+      - OPENVPN_PASSWORD=0QEbQT%x
+      - SERVICE_REGION=france
+      # - VPN_PORT_FORWARDING=on
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24
+      - HTTPPROXY=on
+      # - DOT_PROVIDERS=cloudflare
+      # - DNS_ADDRESS=9.9.9.9
+      # - HEALTH_TARGET_ADDRESS=quad9.net
+    networks:
+      - default
+volumes:
+  config:

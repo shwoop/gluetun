@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/qdm12/gluetun/internal/configuration/settings"
-	"github.com/qdm12/gluetun/internal/constants"
 	"github.com/qdm12/gluetun/internal/constants/providers"
 	"github.com/qdm12/gluetun/internal/openvpn/extract"
 	"github.com/qdm12/gluetun/internal/provider"
@@ -19,6 +18,7 @@ import (
 	"github.com/qdm12/gluetun/internal/updater"
 	"github.com/qdm12/gluetun/internal/updater/resolver"
 	"github.com/qdm12/gluetun/internal/updater/unzip"
+	"github.com/qdm12/gosettings/reader"
 )
 
 var (
@@ -32,7 +32,7 @@ type UpdaterLogger interface {
 	Error(s string)
 }
 
-func (c *CLI) Update(ctx context.Context, args []string, logger UpdaterLogger) error {
+func (c *CLI) Update(ctx context.Context, args []string, reader *reader.Reader, logger UpdaterLogger) error {
 	options := settings.Updater{}
 	var endUserMode, maintainerMode, updateAll bool
 	var csvProviders, ipToken string
@@ -71,7 +71,15 @@ func (c *CLI) Update(ctx context.Context, args []string, logger UpdaterLogger) e
 		return fmt.Errorf("options validation failed: %w", err)
 	}
 
-	storage, err := storage.New(logger, constants.ServersData)
+	var allSettings settings.Settings
+	err = allSettings.Read(reader, logger)
+	if err != nil {
+		return err
+	}
+	allSettings.SetDefaults()
+
+	// Should not use const
+	storage, err := storage.New(logger, *allSettings.Storage.Filepath)
 	if err != nil {
 		return fmt.Errorf("creating servers storage: %w", err)
 	}
