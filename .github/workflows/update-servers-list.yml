@@ -10,7 +10,7 @@ jobs:
     permissions:
       actions: read
       contents: write
-      pull-requests: write
+      # pull-requests: write
     steps:
       - uses: actions/checkout@v5
 
@@ -36,7 +36,8 @@ jobs:
 
       - name: Create Pull Request
         env:
-          # GITHUB_TOKEN: ${{ secrets.UPDATE_SERVERS_LIST_PAT }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.UPDATE_SERVERS_LIST_PAT }}
+          # Using default github token doesn't trigger CI on PR
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --title "Update servers list" --body "This Auto Generated PR updates the servers list." --base master --head bot/update-servers-list
