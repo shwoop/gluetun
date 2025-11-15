@@ -23,7 +23,7 @@ jobs:
         env:
           STORAGE_FILEPATH: /tmp/sfp
         run: |
-          go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2
+          go run ./cmd/gluetun/main.go update -all -maintainer -minratio 0.2 -dns 1.1.1.1
 
       - name: Commit updated servers list
         run: |
